@@ -1,14 +1,21 @@
 package utils
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"github.com/cavaliergopher/grab/v3"
 	"github.com/joho/godotenv"
 	"os"
 	"os/exec"
+	"regexp"
 	"time"
 )
+
+type FileStruct struct {
+	Path     string
+	Contents []byte
+}
 
 type CliArguments struct {
 	Command string
@@ -154,15 +161,33 @@ Loop:
 	fmt.Printf("Download saved to ./%v \n", resp.Filename)
 	fmt.Println("Creating go module and test from template")
 	moduleContent, err := os.ReadFile("./templates/day_x.go")
+	moduleContent = bytes.ReplaceAll(moduleContent, []byte("YX"), []byte(fmt.Sprintf("%d", arguments.Year)))
+	moduleContent = bytes.ReplaceAll(moduleContent, []byte("DX"), []byte(fmt.Sprintf("%d", arguments.Day)))
 	if err := os.WriteFile(fmt.Sprintf("%s/day_%d.go", path, arguments.Day), moduleContent, 0777); err != nil {
 		fmt.Printf("Creating files from template failed: %v\n", err)
 		os.Exit(1)
 	}
 
 	testContent, err := os.ReadFile("./templates/day_x_test.go")
+	testContent = bytes.ReplaceAll(testContent, []byte("YX"), []byte(fmt.Sprintf("%d", arguments.Year)))
+	testContent = bytes.ReplaceAll(testContent, []byte("DX"), []byte(fmt.Sprintf("%d", arguments.Day)))
 	if err := os.WriteFile(fmt.Sprintf("%s/day_%d_test.go", path, arguments.Day), testContent, 0777); err != nil {
 		fmt.Printf("Creating files from template failed: %v\n", err)
 		os.Exit(1)
 	}
 	fmt.Println("Templates created have fun with todays puzzle!")
+}
+
+func ReadFullFileInput(fileStruct FileStruct) ([]byte, error) {
+	// Either we get a path (actual input) or an in-memory []byte
+	if len(fileStruct.Contents) > 0 {
+		return fileStruct.Contents, nil
+	}
+	return os.ReadFile(fileStruct.Path)
+}
+
+func ParseLinesFromFullInput(fileContents []byte) []string {
+	// Either we get a path (actual input) or an in-memory []byte
+	lineBreakRegExp := regexp.MustCompile(`\r?\n`)
+	return lineBreakRegExp.Split(string(fileContents), -1)
 }
