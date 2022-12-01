@@ -4,11 +4,9 @@ import (
 	"aoc-go/utils"
 	"fmt"
 	"sort"
-	"strconv"
 )
 
 func PartOne(inputStruct utils.FileStruct) int {
-	fmt.Println("2022_1 Running Part One")
 	fullInput, _ := utils.ReadFullFileInput(inputStruct)
 	lines := utils.ParseLinesFromFullInput(fullInput)
 
@@ -19,9 +17,9 @@ func PartOne(inputStruct utils.FileStruct) int {
 		if line == "" {
 			elvesTotal = append(elvesTotal, 0)
 			currentElf++
+		} else {
+			elvesTotal[currentElf] += utils.MustParseStringToInt(line)
 		}
-		parsedLine, _ := strconv.Atoi(line)
-		elvesTotal[currentElf] += parsedLine
 	}
 
 	sort.Ints(elvesTotal)
@@ -29,7 +27,6 @@ func PartOne(inputStruct utils.FileStruct) int {
 }
 
 func PartTwo(inputStruct utils.FileStruct) int {
-	fmt.Println("2022_1 Running Part Two")
 	fullInput, _ := utils.ReadFullFileInput(inputStruct)
 	lines := utils.ParseLinesFromFullInput(fullInput)
 
@@ -40,9 +37,9 @@ func PartTwo(inputStruct utils.FileStruct) int {
 		if line == "" {
 			elvesTotal = append(elvesTotal, 0)
 			currentElf++
+		} else {
+			elvesTotal[currentElf] += utils.MustParseStringToInt(line)
 		}
-		parsedLine, _ := strconv.Atoi(line)
-		elvesTotal[currentElf] += parsedLine
 	}
 
 	sort.Ints(elvesTotal)

@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
+	"strconv"
 	"time"
 )
 
@@ -190,4 +191,12 @@ func ParseLinesFromFullInput(fileContents []byte) []string {
 	// Either we get a path (actual input) or an in-memory []byte
 	lineBreakRegExp := regexp.MustCompile(`\r?\n`)
 	return lineBreakRegExp.Split(string(fileContents), -1)
+}
+
+func MustParseStringToInt(integer string) int {
+	i, err := strconv.Atoi(integer)
+	if err != nil {
+		panic(fmt.Sprintf("The following string could not be parsed to an int: %s", integer))
+	}
+	return i
 }

@@ -16,13 +16,13 @@ func TestPartOne(t *testing.T) {
 	}{
 		{
 			name: "Part 1 test",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("1000\n2000\n3000\n\n4000\n\n5000\n6000\n\n7000\n8000\n9000\n\n10000")}},
-			want: 24000,
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("  810  679   10")}},
+			want: 0,
 		},
 		{
 			name: "Part 1 live input",
-			args: args{inputStruct: utils.FileStruct{Path: "day_1_input.txt"}},
-			want: 66719,
+			args: args{inputStruct: utils.FileStruct{Path: "day_3_input.txt"}},
+			want: 869,
 		},
 	}
 	for _, tt := range tests {
@@ -45,13 +45,8 @@ func TestPartTwo(t *testing.T) {
 	}{
 		{
 			name: "Part 2 test",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("1000\n2000\n3000\n\n4000\n\n5000\n6000\n\n7000\n8000\n9000\n\n10000")}},
-			want: 45000,
-		},
-		{
-			name: "Part 2 live input",
-			args: args{inputStruct: utils.FileStruct{Path: "day_1_input.txt"}},
-			want: 198551,
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("101 301 501\n102 302 502\n103 303 503\n201 401 601\n202 402 602\n203 403 603")}},
+			want: 0,
 		},
 	}
 	for _, tt := range tests {

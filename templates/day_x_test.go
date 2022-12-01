@@ -2,28 +2,63 @@ package main
 
 import (
 	"aoc-go/utils"
-	"fmt"
 	"testing"
 )
 
 func TestPartOne(t *testing.T) {
-	fmt.Println("YX_DX Testing Part One")
-	expected := 0
-	inputStruct := utils.FileStruct{} // TODO contents!
-	output := PartOne(inputStruct)
-	// TODO write a test bro
-	if output != expected {
-		t.Errorf("expected %d for the test file got:", expected)
+	type args struct {
+		inputStruct utils.FileStruct
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "Part 1 test",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("TODO_FILL_YOUR_CONTENTS_HERE")}},
+			want: 0,
+		},
+		//{
+		//	name: "Part 1 live input",
+		//	args: args{inputStruct: utils.FileStruct{Path: "day_DX_input.txt"}},
+		//	want: 0,
+		//},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := PartOne(tt.args.inputStruct); got != tt.want {
+				t.Errorf("PartOne() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
 
 func TestPartTwo(t *testing.T) {
-	fmt.Println("YX_DX Testing Part Two")
-	expected := 0
-	inputStruct := utils.FileStruct{} // TODO contents!
-	output := PartTwo(inputStruct)
-	// TODO write a test bro
-	if output != expected {
-		t.Errorf("expected %d for the test file got:", expected)
+	type args struct {
+		inputStruct utils.FileStruct
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "Part 2 test",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("TODO_FILL_YOUR_CONTENTS_HERE")}},
+			want: 0,
+		},
+		//{
+		//	name: "Part 2 live input",
+		//	args: args{inputStruct: utils.FileStruct{Path: "day_DX_input.txt"}},
+		//	want: 0,
+		//},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := PartTwo(tt.args.inputStruct); got != tt.want {
+				t.Errorf("PartTwo() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
