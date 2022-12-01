@@ -18,7 +18,18 @@ For more information about the advent of code see [adventofcode.com](https://adv
   * Runs the unittests
 
 ## Startup
- * WIP
+ * To get your repo working copy the .env.example to a .env file
+ * Fill the session key with the session key in your AOC cookie (on the site)
+ * Download input for a certain day with the following command
+   * This code will download the AOC input of that day and create a template go file as wel as a test file
+   * These files can be edited to include the code required to make the solution work
+      ```go run main.go -command download -year 2022 -day 1```
+ * Run the generated AOC day for a certain day with the following command
+   * Optionally include the `-part` flag to run either part 1 or 2
+     ```go run main.go -command puzzle -year 2022 -day 1```
+ * Run the unittests for a certain day with the following command
+   * Optionally include the `-part` flag to run either part 1 or 2
+   ```go run main.go -command tests -year 2022 -day 1```
 
 ##Years
 ### 2022
