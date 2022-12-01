@@ -104,7 +104,7 @@ func DownloadInput(arguments CliArguments) {
 
 	// Validate the year input
 	if arguments.Year < 2015 || arguments.Year > time.Now().Year() {
-		fmt.Printf("Year out of range 2015 -  %s input:%s\n", time.Now().Year(), arguments.Year)
+		fmt.Printf("Year out of range 2015 -  %d input:%d\n", time.Now().Year(), arguments.Year)
 		os.Exit(1)
 	}
 
@@ -144,7 +144,7 @@ Loop:
 		case <-t.C:
 			fmt.Printf("  transferred %v / %v bytes (%.2f%%)\n",
 				resp.BytesComplete(),
-				resp.Size,
+				resp.Size(),
 				100*resp.Progress())
 
 		case <-resp.Done:
