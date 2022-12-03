@@ -196,7 +196,36 @@ func ParseLinesFromFullInput(fileContents []byte) []string {
 func MustParseStringToInt(integer string) int {
 	i, err := strconv.Atoi(integer)
 	if err != nil {
-		panic(fmt.Sprintf("The following string could not be parsed to an int: %s", integer))
+		fmt.Printf("The following string could not be parsed to an int: %s", integer)
+		os.Exit(1)
 	}
 	return i
+}
+
+func RuneIntersectionUnique(s1 []rune, s2 []rune) []rune {
+	var intersection []rune
+	charMap := make(map[rune]bool, len(s1))
+	// Setup a map
+	for _, item := range s1 {
+		charMap[item] = true
+	}
+	// IF we have the same char append as intersection
+	for _, item := range s2 {
+		if charMap[item] {
+			// Dedup on the GO
+			if !RuneSliceContains(intersection, item) {
+				intersection = append(intersection, item)
+			}
+		}
+	}
+	return intersection
+}
+
+func RuneSliceContains(slice []rune, item rune) bool {
+	for _, value := range slice {
+		if value == item {
+			return true
+		}
+	}
+	return false
 }
