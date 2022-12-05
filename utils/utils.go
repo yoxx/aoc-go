@@ -189,8 +189,7 @@ func ReadFullFileInput(fileStruct FileStruct) ([]byte, error) {
 
 func ParseLinesFromFullInput(fileContents []byte) []string {
 	// Either we get a path (actual input) or an in-memory []byte
-	lineBreakRegExp := regexp.MustCompile(`\r?\n`)
-	return lineBreakRegExp.Split(string(fileContents), -1)
+	return regexp.MustCompile(`\r?\n`).Split(string(fileContents), -1)
 }
 
 func MustParseStringToInt(integer string) int {
@@ -228,4 +227,16 @@ func RuneSliceContains(slice []rune, item rune) bool {
 		}
 	}
 	return false
+}
+
+func ReverseStringSlice(s []string) []string {
+	a := make([]string, len(s))
+	copy(a, s)
+
+	for i := len(a)/2 - 1; i >= 0; i-- {
+		opp := len(a) - 1 - i
+		a[i], a[opp] = a[opp], a[i]
+	}
+
+	return a
 }
