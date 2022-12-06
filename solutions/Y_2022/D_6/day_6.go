@@ -7,43 +7,26 @@ import (
 
 func PartOne(inputStruct utils.FileStruct) int {
 	fullInput, _ := utils.ReadFullFileInput(inputStruct)
-	return FindStartOfPacketMarker([]rune(string(fullInput)))
+	return FindStartOfMarker([]rune(string(fullInput)), 4)
 }
 
 func PartTwo(inputStruct utils.FileStruct) int {
 	fullInput, _ := utils.ReadFullFileInput(inputStruct)
-	return FindStartOfMessageMarker([]rune(string(fullInput)))
+	return FindStartOfMarker([]rune(string(fullInput)), 14)
 }
 
-func FindStartOfPacketMarker(signal []rune) int {
-	var output int
-	for index, _ := range signal {
-		var checkSlice []rune
-		var signalChunk []rune
-		for i := 0; i < 4; i++ {
-			signalChunk = append(signalChunk, signal[index+i])
-		}
-		checkSlice = utils.RuneIntersectionUnique(signalChunk, signalChunk)
-		if len(checkSlice) == 4 {
-			output = index + 4
-			break
-		}
-	}
-	return output
-}
-
-func FindStartOfMessageMarker(signal []rune) int {
+func FindStartOfMarker(signal []rune, markerStart int) int {
 
 	var output int
 	for index, _ := range signal {
 		var checkSlice []rune
 		var signalChunk []rune
-		for i := 0; i < 14; i++ {
+		for i := 0; i < markerStart; i++ {
 			signalChunk = append(signalChunk, signal[index+i])
 		}
 		checkSlice = utils.RuneIntersectionUnique(signalChunk, signalChunk)
-		if len(checkSlice) == 14 {
-			output = index + 14
+		if len(checkSlice) == markerStart {
+			output = index + markerStart
 			break
 		}
 	}
