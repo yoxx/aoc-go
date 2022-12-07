@@ -22,8 +22,8 @@ type FileStruct struct {
 func PartOne(inputStruct utils.FileStruct) int {
 	fullInput, _ := utils.ReadFullFileInput(inputStruct)
 	rootDir := ParseInputToDirStruct(fullInput)
-	_, sum, _ := DetermineDirSizeAndReturnSmallerThan(rootDir, 100000)
-	return sum - rootDir.TotalDirSize
+	_, sum, _ := DetermineDirSize(rootDir, 100000)
+	return sum
 }
 
 func PartTwo(inputStruct utils.FileStruct) int {
@@ -31,9 +31,9 @@ func PartTwo(inputStruct utils.FileStruct) int {
 	minUsedSpace := 30000000
 	fullInput, _ := utils.ReadFullFileInput(inputStruct)
 	rootDir := ParseInputToDirStruct(fullInput)
-	_, _, currentUsedSpace := DetermineDirSizeAndReturnSmallerThan(rootDir, 100000)
+	_, _, currentUsedSpace := DetermineDirSize(rootDir, 0)
 	neededSpace := minUsedSpace - (maxUsedSpace - currentUsedSpace)
-	dirsLargerThanMax, _ := DetermineDirSizeAndReturnLargerThanMaxSize(rootDir, neededSpace)
+	dirsLargerThanMax, _, _ := DetermineDirSize(rootDir, neededSpace)
 
 	var smallestDirMatchingCriteria *DirStruct
 	for _, dir := range dirsLargerThanMax {
@@ -44,47 +44,28 @@ func PartTwo(inputStruct utils.FileStruct) int {
 	return smallestDirMatchingCriteria.TotalDirSize
 }
 
-func DetermineDirSizeAndReturnSmallerThan(dirStruct *DirStruct, sizeMax int) (dirSmallerThanSizeMax []*DirStruct, sumSmallerThenSizeMax int, totalSum int) {
+func DetermineDirSize(dirStruct *DirStruct, sizeMax int) (dirLargerThanSizeMax []*DirStruct, sumSmallerThenSizeMax int, totalDirSum int) {
 	sumSmallerThenSizeMax = 0
-	totalSum = 0
+	totalDirSum = 0
 	// We need to determine the size for each directory (recursively)
 	for _, fileContents := range dirStruct.FileContents {
-		totalSum += fileContents.Size
+		totalDirSum += fileContents.Size
 	}
 	for _, childDir := range dirStruct.DirContents {
-		childDirSmallerThanSizeMax, childSmallerThenSizeMax, childSum := DetermineDirSizeAndReturnSmallerThan(childDir, sizeMax)
-		dirSmallerThanSizeMax = append(dirSmallerThanSizeMax, childDirSmallerThanSizeMax...)
-		totalSum += childSum
-		sumSmallerThenSizeMax += childSmallerThenSizeMax
-	}
-	// We need to SUM the total sizes of these dirs (this CAN count files more than once as it bubbles-up)
-	if totalSum < sizeMax {
-		dirSmallerThanSizeMax = append(dirSmallerThanSizeMax, dirStruct)
-		sumSmallerThenSizeMax += totalSum
-	}
-
-	dirStruct.TotalDirSize = totalSum
-	return dirSmallerThanSizeMax, sumSmallerThenSizeMax, totalSum
-}
-
-func DetermineDirSizeAndReturnLargerThanMaxSize(dirStruct *DirStruct, sizeMax int) (dirLargerThanSizeMax []*DirStruct, totalSum int) {
-	totalSum = 0
-	// We need to determine the size for each directory (recursively)
-	for _, fileContents := range dirStruct.FileContents {
-		totalSum += fileContents.Size
-	}
-	for _, childDir := range dirStruct.DirContents {
-		childDirLargerThanSizeMax, childSum := DetermineDirSizeAndReturnLargerThanMaxSize(childDir, sizeMax)
+		childDirLargerThanSizeMax, childLargerThanSizeMax, childSum := DetermineDirSize(childDir, sizeMax)
 		dirLargerThanSizeMax = append(dirLargerThanSizeMax, childDirLargerThanSizeMax...)
-		totalSum += childSum
+		totalDirSum += childSum
+		sumSmallerThenSizeMax += childLargerThanSizeMax
 	}
 	// We need to SUM the total sizes of these dirs (this CAN count files more than once as it bubbles-up)
-	if totalSum > sizeMax {
+	if totalDirSum < sizeMax {
+		sumSmallerThenSizeMax += totalDirSum
+	} else {
 		dirLargerThanSizeMax = append(dirLargerThanSizeMax, dirStruct)
 	}
 
-	dirStruct.TotalDirSize = totalSum
-	return dirLargerThanSizeMax, totalSum
+	dirStruct.TotalDirSize = totalDirSum
+	return dirLargerThanSizeMax, sumSmallerThenSizeMax, totalDirSum
 }
 
 func ParseInputToDirStruct(input []byte) *DirStruct {
