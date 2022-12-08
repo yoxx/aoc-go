@@ -240,3 +240,37 @@ func ReverseStringSlice(s []string) []string {
 
 	return a
 }
+
+func ReverseIntSlice(s []int) []int {
+	a := make([]int, len(s))
+	copy(a, s)
+
+	for i := len(a)/2 - 1; i >= 0; i-- {
+		opp := len(a) - 1 - i
+		a[i], a[opp] = a[opp], a[i]
+	}
+
+	return a
+}
+
+func ReverseMatrixSlices(matrix [][]int) [][]int {
+	var rowMatrix [][]int
+	for _, row := range matrix {
+		rowMatrix = append(rowMatrix, ReverseIntSlice(row))
+	}
+
+	return rowMatrix
+}
+
+func ReverseMatrixColumnsAndRows(matrix [][]int) [][]int {
+	var colMatrix [][]int
+	for rIndex, row := range matrix {
+		for cIndex, col := range row {
+			if rIndex == 0 { // only append the first row as new column rows
+				colMatrix = append(colMatrix, []int{})
+			}
+			colMatrix[cIndex] = append(colMatrix[cIndex], col)
+		}
+	}
+	return colMatrix
+}
