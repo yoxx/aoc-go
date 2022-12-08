@@ -11,18 +11,72 @@ func PartOne(inputStruct utils.FileStruct) int {
 }
 
 func PartTwo(inputStruct utils.FileStruct) int {
-	// TODO write part two
-	return 0
+	matrix := CreateMatrix(inputStruct)
+	return DetermineHighestTreeScenicScore(matrix)
 }
 
-//func DetermineHighestTreeScenicScore(matrix [][]int) int {
-//	highestScore := 0
-//	for rIndex, row := range matrix {
-//		for cIndex, col := row {
-//			if (rIndex == 0 || )
-//		}
-//	}
-//}
+func DetermineHighestTreeScenicScore(matrix [][]int) int {
+	highestScore := 0
+	for rIndex, row := range matrix {
+		for cIndex, tree := range row {
+			var leftScore, rightScore, upScore, downScore int
+			// look left
+			if cIndex == 0 {
+				leftScore = 0
+			} else {
+				for i := cIndex - 1; i >= 0; i-- {
+					// we always see a tree
+					leftScore++
+					if tree <= matrix[rIndex][i] {
+						break
+					}
+				}
+			}
+			// look right
+			if cIndex == len(row)-1 {
+				rightScore = 0
+			} else {
+				for i := cIndex + 1; i <= len(row)-1; i++ {
+					// we always see a tree
+					rightScore++
+					if tree <= matrix[rIndex][i] {
+						break
+					}
+				}
+			}
+			// look up
+			if rIndex == 0 {
+				upScore = 0
+			} else {
+				for i := rIndex - 1; i >= 0; i-- {
+					// we always see a tree
+					upScore++
+					if tree <= matrix[i][cIndex] {
+						break
+					}
+				}
+			}
+			// look down
+			if rIndex == len(matrix)-1 {
+				downScore = 0
+			} else {
+				for i := rIndex + 1; i <= len(matrix)-1; i++ {
+					// we always see a tree
+					downScore++
+					if tree <= matrix[i][cIndex] {
+						break
+					}
+				}
+			}
+			var scenicScore = leftScore * rightScore * upScore * downScore
+			if scenicScore > highestScore {
+				highestScore = scenicScore
+			}
+		}
+	}
+
+	return highestScore
+}
 
 func DetermineVisibleTrees(matrix [][]int) (totalVisibleTrees int) {
 	// Left
@@ -78,7 +132,9 @@ func CreateMatrix(inputStruct utils.FileStruct) (matrix [][]int) {
 		for _, char := range line {
 			row = append(row, utils.MustParseStringToInt(string(char)))
 		}
-		matrix = append(matrix, row)
+		if len(row) > 0 {
+			matrix = append(matrix, row)
+		}
 	}
 	return matrix
 }
