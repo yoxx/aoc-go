@@ -37,12 +37,19 @@ func MoveRopeHeadAndTail(curHeadLoc location, curTailLoc location, direction str
 	for step := 0; step < steps; step++ {
 		switch direction {
 		case "U":
+			curHeadLoc.y--
+			if !InSquareAround(lastTailLoc, curHeadLoc) {
+				fmt.Println(lastTailLoc)
+			}
 			break
 		case "D":
+			curHeadLoc.y++
 			break
 		case "R":
+			curHeadLoc.x++
 			break
 		case "L":
+			curHeadLoc.x--
 			break
 		default:
 			fmt.Printf("UNKNOWN DIRECTION CASE: %s", direction)
@@ -57,6 +64,10 @@ func MoveRopeHeadAndTail(curHeadLoc location, curTailLoc location, direction str
 		}
 	}
 	return headLocations, tailLocations
+}
+
+func InSquareAround(tailLocation location, headLocation location) bool {
+	return true
 }
 
 func main() {
