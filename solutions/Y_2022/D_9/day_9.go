@@ -19,12 +19,13 @@ func PartOne(inputStruct utils.FileStruct) int {
 	lines := utils.ParseLinesFromFullInput(input)
 	for _, line := range lines {
 		lineSlice := regexp.MustCompile(" ").Split(line, -1)
-		newHeadLocations, newTailLocations := MoveRopeHeadAndTail(headLocations[len(headLocations)-1], headLocations[len(headLocations)-1], lineSlice[0], utils.MustParseStringToInt(lineSlice[1]))
-		println(newHeadLocations, newTailLocations)
-		tailLocations = append(tailLocations, newTailLocations...)
-		tailLocations = append(headLocations, newHeadLocations...)
+		if len(lineSlice) > 1 {
+			newHeadLocations, newTailLocations := MoveRopeHeadAndTail(headLocations[len(headLocations)-1], tailLocations[len(tailLocations)-1], lineSlice[0], utils.MustParseStringToInt(lineSlice[1]))
+			tailLocations = append(tailLocations, newTailLocations...)
+			headLocations = append(headLocations, newHeadLocations...)
+		}
 	}
-	return 0
+	return len(DedupLocationSlice(tailLocations))
 }
 
 func PartTwo(inputStruct utils.FileStruct) int {
@@ -39,17 +40,26 @@ func MoveRopeHeadAndTail(curHeadLoc location, curTailLoc location, direction str
 		case "U":
 			curHeadLoc.y--
 			if !InSquareAround(lastTailLoc, curHeadLoc) {
-				fmt.Println(lastTailLoc)
+				curTailLoc = MoveTailCloserToHead(curTailLoc, curHeadLoc)
 			}
 			break
 		case "D":
 			curHeadLoc.y++
+			if !InSquareAround(lastTailLoc, curHeadLoc) {
+				curTailLoc = MoveTailCloserToHead(curTailLoc, curHeadLoc)
+			}
 			break
 		case "R":
 			curHeadLoc.x++
+			if !InSquareAround(lastTailLoc, curHeadLoc) {
+				curTailLoc = MoveTailCloserToHead(curTailLoc, curHeadLoc)
+			}
 			break
 		case "L":
 			curHeadLoc.x--
+			if !InSquareAround(lastTailLoc, curHeadLoc) {
+				curTailLoc = MoveTailCloserToHead(curTailLoc, curHeadLoc)
+			}
 			break
 		default:
 			fmt.Printf("UNKNOWN DIRECTION CASE: %s", direction)
@@ -66,8 +76,81 @@ func MoveRopeHeadAndTail(curHeadLoc location, curTailLoc location, direction str
 	return headLocations, tailLocations
 }
 
+func MoveTailCloserToHead(curTail location, curHead location) location {
+	// Down
+	if curHead.x == curTail.x && curHead.y > curTail.y {
+		curTail.y++
+	}
+	// Up
+	if curHead.x == curTail.x && curHead.y < curTail.y {
+		curTail.y--
+	}
+	// Left
+	if curHead.x < curTail.x && curHead.y == curTail.y {
+		curTail.x--
+	}
+	// Right
+	if curHead.x > curTail.x && curHead.y == curTail.y {
+		curTail.x++
+	}
+	// Diagonal Left Up
+	if curHead.x < curTail.x && curHead.y < curTail.y {
+		curTail.y--
+		curTail.x--
+	}
+	// Diagonal Right Up
+	if curHead.x > curTail.x && curHead.y < curTail.y {
+		curTail.y--
+		curTail.x++
+	}
+	// Diagonal Left Down
+	if curHead.x < curTail.x && curHead.y > curTail.y {
+		curTail.y++
+		curTail.x--
+	}
+	// Diagonal Right Down
+	if curHead.x > curTail.x && curHead.y > curTail.y {
+		curTail.y++
+		curTail.x++
+	}
+
+	return curTail
+}
+
 func InSquareAround(tailLocation location, headLocation location) bool {
-	return true
+	if headLocation.x >= tailLocation.x-1 && headLocation.x <= tailLocation.x+1 &&
+		headLocation.y >= tailLocation.y-1 && headLocation.y <= tailLocation.y+1 {
+		return true
+	}
+	return false
+}
+
+func DedupLocationSlice(locations []location) []location {
+	var intersection []location
+	charMap := make(map[location]bool, len(locations))
+	// Setup a map
+	for _, item := range locations {
+		charMap[item] = true
+	}
+	// IF we have the same char append as intersection
+	for _, item := range locations {
+		if charMap[item] {
+			// Dedup on the GO
+			if !LocationSliceContains(intersection, item) {
+				intersection = append(intersection, item)
+			}
+		}
+	}
+	return intersection
+}
+
+func LocationSliceContains(slice []location, item location) bool {
+	for _, value := range slice {
+		if value.x == item.x && value.y == item.y {
+			return true
+		}
+	}
+	return false
 }
 
 func main() {
