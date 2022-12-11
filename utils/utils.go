@@ -201,9 +201,9 @@ func MustParseStringToInt(integer string) int {
 	return i
 }
 
-func ParseStringSliceToUInt64Slice(slice []string) (output []uint64) {
+func ParseStringSliceToIntSlice(slice []string) (output []int) {
 	for _, item := range slice {
-		output = append(output, uint64(MustParseStringToInt(item)))
+		output = append(output, MustParseStringToInt(item))
 	}
 	return output
 }
@@ -260,7 +260,7 @@ func ReverseIntSlice(s []int) []int {
 	return a
 }
 
-func PopFirstItemUInt64Slice(s []uint64) (item uint64, slice []uint64) {
+func PopFirstItemIntSlice(s []int) (item int, slice []int) {
 	if len(s) == 0 {
 		fmt.Print("Cannot pop item from an empty slice")
 		os.Exit(1)

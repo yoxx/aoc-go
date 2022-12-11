@@ -9,16 +9,16 @@ import (
 )
 
 type Monkey struct {
-	Items             []uint64
+	Items             []int
 	Operation         string
 	Test              []int
 	inspectionCounter int
 }
 
 func PartOne(inputStruct utils.FileStruct) int {
-	monkeys := ParseInput(inputStruct)
+	monkeys, _ := ParseInput(inputStruct)
 	for i := 1; i <= 20; i++ {
-		monkeys = HandleRound(monkeys, true)
+		monkeys = HandleRound(monkeys, 0)
 	}
 
 	var activity []int
@@ -30,9 +30,9 @@ func PartOne(inputStruct utils.FileStruct) int {
 }
 
 func PartTwo(inputStruct utils.FileStruct) int {
-	monkeys := ParseInput(inputStruct)
+	monkeys, maxUniverse := ParseInput(inputStruct)
 	for i := 1; i <= 10000; i++ {
-		monkeys = HandleRound(monkeys, false)
+		monkeys = HandleRound(monkeys, maxUniverse)
 	}
 
 	var activity []int
@@ -40,26 +40,27 @@ func PartTwo(inputStruct utils.FileStruct) int {
 		activity = append(activity, monkey.inspectionCounter)
 	}
 	sort.Ints(activity)
-	fmt.Println(activity)
-	//return activity[len(activity)-1] * activity[len(activity)-2]
-	return 2713310158
+	return activity[len(activity)-1] * activity[len(activity)-2]
 }
 
-func HandleRound(monkeys []Monkey, dontWorry bool) []Monkey {
+func HandleRound(monkeys []Monkey, maxUniverse int) []Monkey {
 	for index, monkey := range monkeys {
 		startLen := len(monkey.Items)
 		for i := 0; i < startLen; i++ {
 			monkey.inspectionCounter++
-			item, items := utils.PopFirstItemUInt64Slice(monkey.Items)
+			item, items := utils.PopFirstItemIntSlice(monkey.Items)
 			monkey.Items = items
-			// Step 1 -> monkey inspects -> worry level increases with Operation
-			item = HandleOperation(monkey.Operation, item)
-			if dontWorry {
+			if maxUniverse == 0 {
+				// Step 1 -> monkey inspects -> worry level increases with Operation
+				item = HandleOperation(monkey.Operation, item)
 				// Step 2 -> Item is fine worry level decreases with /3
 				item = item / 3
+			} else {
+				// Step 1 -> monkey inspects -> worry level increases with Operation
+				item = HandleOperation(monkey.Operation, item) % maxUniverse
 			}
 			// Step 3 -> Item gets tested for worry level and thrown based on true/false
-			if item%uint64(monkey.Test[0]) == 0 {
+			if item%monkey.Test[0] == 0 {
 				// Throw to true case
 				monkeys[monkey.Test[1]].Items = append(monkeys[monkey.Test[1]].Items, item)
 			} else {
@@ -72,19 +73,19 @@ func HandleRound(monkeys []Monkey, dontWorry bool) []Monkey {
 	return monkeys
 }
 
-func HandleOperation(operation string, item uint64) uint64 {
+func HandleOperation(operation string, item int) int {
 	elements := regexp.MustCompile(" ").Split(operation, -1)
-	var operationElement1, operationElement2 uint64
+	var operationElement1, operationElement2 int
 	if elements[2] == "old" {
 		operationElement1 = item
 	} else {
-		operationElement1 = uint64(utils.MustParseStringToInt(elements[2]))
+		operationElement1 = utils.MustParseStringToInt(elements[2])
 	}
 
 	if elements[4] == "old" {
 		operationElement2 = item
 	} else {
-		operationElement2 = uint64(utils.MustParseStringToInt(elements[4]))
+		operationElement2 = utils.MustParseStringToInt(elements[4])
 	}
 	if elements[3] == "*" {
 		return operationElement1 * operationElement2
@@ -93,7 +94,8 @@ func HandleOperation(operation string, item uint64) uint64 {
 	return operationElement1 + operationElement2
 }
 
-func ParseInput(fileStruct utils.FileStruct) (monkeys []Monkey) {
+func ParseInput(fileStruct utils.FileStruct) (monkeys []Monkey, maxUniverse int) {
+	maxUniverse = 1
 	// FIRST we split on a newline to get the monkeys
 	input, _ := utils.ReadFullFileInput(fileStruct)
 	monkeyInput := regexp.MustCompile(`\n\n`).Split(string(input), -1)
@@ -104,7 +106,7 @@ func ParseInput(fileStruct utils.FileStruct) (monkeys []Monkey) {
 		for index, monkeyLine := range monkeyLines {
 			switch index {
 			case 1: // items
-				monkey.Items = utils.ParseStringSliceToUInt64Slice(regexp.MustCompile(`\d+`).FindAllString(monkeyLine, -1))
+				monkey.Items = utils.ParseStringSliceToIntSlice(regexp.MustCompile(`\d+`).FindAllString(monkeyLine, -1))
 				break
 			case 2: // operation
 				monkey.Operation = strings.Replace(monkeyLine, "  Operation: ", "", -1)
@@ -121,8 +123,9 @@ func ParseInput(fileStruct utils.FileStruct) (monkeys []Monkey) {
 			}
 		}
 		monkeys = append(monkeys, monkey)
+		maxUniverse *= monkey.Test[0]
 	}
-	return monkeys
+	return monkeys, maxUniverse
 }
 
 func main() {
