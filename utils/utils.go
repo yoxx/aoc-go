@@ -201,6 +201,13 @@ func MustParseStringToInt(integer string) int {
 	return i
 }
 
+func ParseStringSliceToUInt64Slice(slice []string) (output []uint64) {
+	for _, item := range slice {
+		output = append(output, uint64(MustParseStringToInt(item)))
+	}
+	return output
+}
+
 func RuneIntersectionUnique(s1 []rune, s2 []rune) []rune {
 	var intersection []rune
 	charMap := make(map[rune]bool, len(s1))
@@ -251,6 +258,16 @@ func ReverseIntSlice(s []int) []int {
 	}
 
 	return a
+}
+
+func PopFirstItemUInt64Slice(s []uint64) (item uint64, slice []uint64) {
+	if len(s) == 0 {
+		fmt.Print("Cannot pop item from an empty slice")
+		os.Exit(1)
+	} else if len(s) == 1 {
+		return s[0], s[0:0]
+	}
+	return s[0], s[1:]
 }
 
 func ReverseMatrixSlices(matrix [][]int) [][]int {
