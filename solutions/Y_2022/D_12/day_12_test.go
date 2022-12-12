@@ -19,7 +19,7 @@ func TestPartOne(t *testing.T) {
 			args: args{inputStruct: utils.FileStruct{Contents: []byte("Sabqponm\nabcryxxl\naccszExk\nacctuvwj\nabdefghi")}},
 			want: 31,
 		},
-		//{
+		//{ // Dijkstra works for the test, but my code sucks and it takes ages running  for the actual input
 		//	name: "Part 1 live input",
 		//	args: args{inputStruct: utils.FileStruct{Path: "day_12_input.txt"}},
 		//	want: 0,
