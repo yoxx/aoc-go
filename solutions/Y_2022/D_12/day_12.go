@@ -13,16 +13,7 @@ type Location struct {
 
 func PartOne(inputStruct utils.FileStruct) int {
 	startIndex, endIndex, heightMap := InputToHeightMap(inputStruct)
-	paths := FindPaths(endIndex, startIndex, heightMap, []Location{})
-	// Get the shortest path
-	shortestPath := 0
-	for _, path := range paths {
-		if shortestPath == 0 || len(path) < shortestPath {
-			shortestPath = len(path)
-		}
-	}
-	//return shortestPath
-	return shortestPath - 1
+	return BFS(endIndex, startIndex, heightMap)
 }
 
 func PartTwo(inputStruct utils.FileStruct) int {
@@ -30,68 +21,78 @@ func PartTwo(inputStruct utils.FileStruct) int {
 	return 0
 }
 
-func FindPaths(startIndex Location, endIndex Location, heightMap [][]Location, pathSoFar []Location) (paths [][]Location) {
-	// Right-io lets walk all the paths we can find
-	// We are only allowed to go Right, Left, Up, Down
-	// We are only allowed to visit places that are of the same elevation OR 1 lower/higher
-	// For ease of use we are putting the locations we visited to visited = true
-	// https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
-	pathSoFar = append(pathSoFar, heightMap[startIndex.y][startIndex.x])
-	fmt.Println(string(startIndex.char), startIndex)
-	// Much wow we reached the end lets save this path
-	if startIndex == endIndex {
-		return append(paths, pathSoFar)
-	}
-	// Up
-	if startIndex.y-1 >= 0 && !isValueInList(heightMap[startIndex.y-1][startIndex.x], pathSoFar) && heightMap[startIndex.y-1][startIndex.x].char >= (startIndex.char-1) && heightMap[startIndex.y-1][startIndex.x].char <= (startIndex.char+1) {
-		path := FindPaths(heightMap[startIndex.y-1][startIndex.x], endIndex, heightMap, pathSoFar)
-		if len(path) > 0 {
-			paths = append(paths, path...)
+func BFS(startLocation, finish Location, heightMap [][]Location) int {
+	yMax := len(heightMap)
+	xMax := len(heightMap[0])
+	// https://www.youtube.com/watch?v=xlVX7dXLS64
+	visited := map[Location]bool{}
+	queue := []Location{startLocation}
+	distanceToLoc := map[Location]int{startLocation: 0}
+	directions := [][]int{{0, 1}, {0, -1}, {1, 0}, {-1, 0}}
+
+	for len(queue) > 0 {
+		// Early out if we reached our target
+		poppedLocation := queue[0]
+		if poppedLocation == finish {
+			break
+		}
+		queue = queue[1:]
+		if !visited[poppedLocation] {
+			visited[poppedLocation] = true
+			// Get the neighbours
+			for _, dir := range directions {
+				nextX := poppedLocation.x + dir[0]
+				nextY := poppedLocation.y + dir[1]
+
+				// Early out for non existing (out-of-bounds) locations
+				if nextX < 0 || nextX >= xMax || nextY < 0 || nextY >= yMax {
+					continue
+				}
+				// Get our next location
+				nextLocation := Location{
+					char: heightMap[poppedLocation.y+dir[1]][poppedLocation.x+dir[0]].char,
+					x:    poppedLocation.x + dir[0],
+					y:    poppedLocation.y + dir[1],
+				}
+				// Check if we already visited them
+				if !visited[nextLocation] {
+					if nextLocation.char == poppedLocation.char || nextLocation.char == poppedLocation.char-1 {
+						queue = append(queue, nextLocation)
+						if distanceToLoc[nextLocation] == 0 {
+							// We have not yet calculated a distance to this location
+							distanceToLoc[nextLocation] = distanceToLoc[poppedLocation] + 1
+						} else if distanceToLoc[nextLocation] >= distanceToLoc[poppedLocation]+1 {
+							distanceToLoc[nextLocation] = distanceToLoc[poppedLocation] + 1
+						}
+					}
+				}
+			}
 		}
 	}
-	// Down
-	if startIndex.y+1 < len(heightMap) && !isValueInList(heightMap[startIndex.y+1][startIndex.x], pathSoFar) && heightMap[startIndex.y+1][startIndex.x].char >= (startIndex.char-1) && heightMap[startIndex.y+1][startIndex.x].char <= (startIndex.char+1) {
-		path := FindPaths(heightMap[startIndex.y+1][startIndex.x], endIndex, heightMap, pathSoFar)
-		if len(path) > 0 {
-			paths = append(paths, path...)
-		}
-	}
-	// Left
-	if startIndex.x-1 >= 0 && !isValueInList(heightMap[startIndex.y][startIndex.x-1], pathSoFar) && heightMap[startIndex.y][startIndex.x-1].char >= (startIndex.char-1) && heightMap[startIndex.y][startIndex.x-1].char <= (startIndex.char+1) {
-		path := FindPaths(heightMap[startIndex.y][startIndex.x-1], endIndex, heightMap, pathSoFar)
-		if len(path) > 0 {
-			paths = append(paths, path...)
-		}
-	}
-	// Right
-	if startIndex.x+1 < len(heightMap[0]) && !isValueInList(heightMap[startIndex.y][startIndex.x+1], pathSoFar) && heightMap[startIndex.y][startIndex.x+1].char >= (startIndex.char-1) && heightMap[startIndex.y][startIndex.x+1].char <= (startIndex.char+1) {
-		path := FindPaths(heightMap[startIndex.y][startIndex.x+1], endIndex, heightMap, pathSoFar)
-		if len(path) > 0 {
-			paths = append(paths, path...)
-		}
-	}
-	return
+	return distanceToLoc[finish]
 }
 
 func InputToHeightMap(inputStruct utils.FileStruct) (startIndex Location, endIndex Location, heightMap [][]Location) {
 	input, _ := utils.ReadFullFileInput(inputStruct)
 	for yIndex, line := range utils.ParseLinesFromFullInput(input) {
-		heightMap = append(heightMap, []Location{})
-		for xIndex, char := range line {
-			location := Location{
-				char: char,
-				x:    xIndex,
-				y:    yIndex,
+		if len(line) > 0 {
+			heightMap = append(heightMap, []Location{})
+			for xIndex, char := range line {
+				location := Location{
+					char: char,
+					x:    xIndex,
+					y:    yIndex,
+				}
+				if char == 'S' {
+					location.char = 'a'
+					startIndex = location
+				}
+				if char == 'E' {
+					location.char = 'z'
+					endIndex = location
+				}
+				heightMap[yIndex] = append(heightMap[yIndex], location)
 			}
-			if char == 'S' {
-				location.char = 'a'
-				startIndex = location
-			}
-			if char == 'E' {
-				location.char = 'z'
-				endIndex = location
-			}
-			heightMap[yIndex] = append(heightMap[yIndex], location)
 		}
 	}
 	return

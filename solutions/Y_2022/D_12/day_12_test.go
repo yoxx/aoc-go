@@ -19,11 +19,11 @@ func TestPartOne(t *testing.T) {
 			args: args{inputStruct: utils.FileStruct{Contents: []byte("Sabqponm\nabcryxxl\naccszExk\nacctuvwj\nabdefghi")}},
 			want: 31,
 		},
-		//{ // Dijkstra works for the test, but my code sucks and it takes ages running  for the actual input
-		//	name: "Part 1 live input",
-		//	args: args{inputStruct: utils.FileStruct{Path: "day_12_input.txt"}},
-		//	want: 0,
-		//},
+		{ // BFS works for the test, but not for actual input which turns out to return 0... what
+			name: "Part 1 live input",
+			args: args{inputStruct: utils.FileStruct{Path: "day_12_input.txt"}},
+			want: 0,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
