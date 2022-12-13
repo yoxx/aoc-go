@@ -13,15 +13,15 @@ type Location struct {
 
 func PartOne(inputStruct utils.FileStruct) int {
 	startIndex, endIndex, heightMap := InputToHeightMap(inputStruct)
-	return BFS(endIndex, startIndex, heightMap)
+	return BFS(endIndex, startIndex, heightMap, false)
 }
 
 func PartTwo(inputStruct utils.FileStruct) int {
-	// TODO write part two
-	return 0
+	startIndex, endIndex, heightMap := InputToHeightMap(inputStruct)
+	return BFS(endIndex, startIndex, heightMap, true)
 }
 
-func BFS(startLocation, finish Location, heightMap [][]Location) int {
+func BFS(startLocation, finish Location, heightMap [][]Location, part2 bool) int {
 	yMax := len(heightMap)
 	xMax := len(heightMap[0])
 	// https://www.youtube.com/watch?v=xlVX7dXLS64
@@ -33,7 +33,8 @@ func BFS(startLocation, finish Location, heightMap [][]Location) int {
 	for len(queue) > 0 {
 		// Early out if we reached our target
 		poppedLocation := queue[0]
-		if poppedLocation == finish {
+		if poppedLocation == finish || (part2 && poppedLocation.char == 'a') {
+			finish = poppedLocation
 			break
 		}
 		queue = queue[1:]
@@ -56,10 +57,10 @@ func BFS(startLocation, finish Location, heightMap [][]Location) int {
 				}
 				// Check if we already visited them
 				if !visited[nextLocation] {
-					if nextLocation.char == poppedLocation.char || nextLocation.char == poppedLocation.char-1 {
-						queue = append(queue, nextLocation)
+					if poppedLocation.char-nextLocation.char <= 1 {
 						if distanceToLoc[nextLocation] == 0 {
 							// We have not yet calculated a distance to this location
+							queue = append(queue, nextLocation)
 							distanceToLoc[nextLocation] = distanceToLoc[poppedLocation] + 1
 						} else if distanceToLoc[nextLocation] >= distanceToLoc[poppedLocation]+1 {
 							distanceToLoc[nextLocation] = distanceToLoc[poppedLocation] + 1

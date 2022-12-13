@@ -19,10 +19,10 @@ func TestPartOne(t *testing.T) {
 			args: args{inputStruct: utils.FileStruct{Contents: []byte("Sabqponm\nabcryxxl\naccszExk\nacctuvwj\nabdefghi")}},
 			want: 31,
 		},
-		{ // BFS works for the test, but not for actual input which turns out to return 0... what
+		{ // BFS works for the test, but not for actual input which turns out to return 0... wha391
 			name: "Part 1 live input",
 			args: args{inputStruct: utils.FileStruct{Path: "day_12_input.txt"}},
-			want: 0,
+			want: 391,
 		},
 	}
 	for _, tt := range tests {
@@ -44,15 +44,15 @@ func TestPartTwo(t *testing.T) {
 		want int
 	}{
 		{
-			name: "Part 2 test",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("TODO_FILL_YOUR_CONTENTS_HERE")}},
-			want: 0,
+			name: "Part 1 test",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("Sabqponm\nabcryxxl\naccszExk\nacctuvwj\nabdefghi")}},
+			want: 29,
 		},
-		//{
-		//	name: "Part 2 live input",
-		//	args: args{inputStruct: utils.FileStruct{Path: "day_12_input.txt"}},
-		//	want: 0,
-		//},
+		{
+			name: "Part 2 live input",
+			args: args{inputStruct: utils.FileStruct{Path: "day_12_input.txt"}},
+			want: 386,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
