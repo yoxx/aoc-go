@@ -16,14 +16,14 @@ func TestPartOne(t *testing.T) {
 	}{
 		{
 			name: "Part 1 test",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("R 4\nU 4\nL 3\nD 1\nR 4\nD 1\nL 5\nR 2")}},
-			want: 13,
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("498,4 -> 498,6 -> 496,6\n503,4 -> 502,4 -> 502,9 -> 494,9")}},
+			want: 0,
 		},
-		{
-			name: "Part 1 live input",
-			args: args{inputStruct: utils.FileStruct{Path: "day_9_input.txt"}},
-			want: 6332,
-		},
+		//{
+		//	name: "Part 1 live input",
+		//	args: args{inputStruct: utils.FileStruct{Path: "day_14_input.txt"}},
+		//	want: 0,
+		//},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -45,17 +45,12 @@ func TestPartTwo(t *testing.T) {
 	}{
 		{
 			name: "Part 2 test",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("R 4\nU 4\nL 3\nD 1\nR 4\nD 1\nL 5\nR 2")}},
-			want: 1,
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("TODO_FILL_YOUR_CONTENTS_HERE")}},
+			want: 0,
 		},
 		//{
-		//	name: "Part 2 test",
-		//	args: args{inputStruct: utils.FileStruct{Contents: []byte("R 5\nU 8\nL 8\nD 3\nR 17\nD 10\nL 25\nU 20")}},
-		//	want: 36,
-		//},
-		//{
 		//	name: "Part 2 live input",
-		//	args: args{inputStruct: utils.FileStruct{Path: "day_9_input.txt"}},
+		//	args: args{inputStruct: utils.FileStruct{Path: "day_14_input.txt"}},
 		//	want: 0,
 		//},
 	}

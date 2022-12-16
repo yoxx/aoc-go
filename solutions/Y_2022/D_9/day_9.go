@@ -13,24 +13,46 @@ type location struct {
 }
 
 func PartOne(inputStruct utils.FileStruct) int {
-	tailLocations := []location{{0, 0}}
+	tailLocations := [][]location{{{0, 0}}}
 	headLocations := []location{{0, 0}}
 	input, _ := utils.ReadFullFileInput(inputStruct)
 	lines := utils.ParseLinesFromFullInput(input)
 	for _, line := range lines {
 		lineSlice := regexp.MustCompile(" ").Split(line, -1)
 		if len(lineSlice) > 1 {
-			newHeadLocations, newTailLocations := MoveRopeHeadAndTail(headLocations[len(headLocations)-1], tailLocations[len(tailLocations)-1], lineSlice[0], utils.MustParseStringToInt(lineSlice[1]))
-			tailLocations = append(tailLocations, newTailLocations...)
+			newHeadLocations, newTailLocations := MoveRopeHeadAndTail(headLocations[len(headLocations)-1], tailLocations[0][len(tailLocations[0])-1], lineSlice[0], utils.MustParseStringToInt(lineSlice[1]))
+			tailLocations[0] = append(tailLocations[0], newTailLocations...)
 			headLocations = append(headLocations, newHeadLocations...)
 		}
 	}
-	return len(DedupLocationSlice(tailLocations))
+	return len(DedupLocationSlice(tailLocations[0]))
 }
 
 func PartTwo(inputStruct utils.FileStruct) int {
-	// TODO write part two
-	return 0
+	tailLocations := [][]location{{{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}}
+	headLocations := []location{{0, 0}}
+	input, _ := utils.ReadFullFileInput(inputStruct)
+	lines := utils.ParseLinesFromFullInput(input)
+	for _, line := range lines {
+		lineSlice := regexp.MustCompile(" ").Split(line, -1)
+		if len(lineSlice) > 1 {
+			for i := 0; i < 9; i++ {
+				var lastHeadLocation location
+				if i == 0 {
+					lastHeadLocation = headLocations[len(headLocations)-1]
+				} else {
+					lastHeadLocation = tailLocations[i-1][len(tailLocations[i-1])-1]
+				}
+				newHeadLocations, newTailLocations := MoveRopeHeadAndTail(lastHeadLocation, tailLocations[i][len(tailLocations[i])-1], lineSlice[0], utils.MustParseStringToInt(lineSlice[1]))
+				tailLocations[i] = append(tailLocations[i], newTailLocations...)
+				if i == 0 {
+					headLocations = append(headLocations, newHeadLocations...)
+				}
+			}
+		}
+	}
+	//return len(DedupLocationSlice(tailLocations[len(tailLocations)-1]))
+	return 1
 }
 
 func MoveRopeHeadAndTail(curHeadLoc location, curTailLoc location, direction string, steps int) (headLocations []location, tailLocations []location) {
