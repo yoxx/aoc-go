@@ -6,7 +6,7 @@ import (
 )
 
 func PartOne(inputStruct utils.FileStruct) int {
-	// TODO write part two
+	// TODO write part one
 	return 0
 }
 

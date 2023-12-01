@@ -6,7 +6,7 @@ For more information about the advent of code see [adventofcode.com](https://adv
 
 ## General Info
 * This project is written in Golang
-    * Current Go version 1.19.3
+    * Current Go version 1.20.2
 * I like to do the advent puzzles for as long as I have time, usually it gets busier during the december month.
   This will result in me picking my battles and focussing on other things. I do it for fun anyways.
 * Previous years I have tried to do my AOC in PHP. The repo for that can be found here [advent-of-code](https://github.com/yoxx/advent-of-code)
