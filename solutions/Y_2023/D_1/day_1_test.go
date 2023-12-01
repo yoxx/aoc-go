@@ -20,15 +20,15 @@ func TestPartOne(t *testing.T) {
 			want: 142,
 		},
 		{
-			name: "Part 1 test",
+			name: "Part 1 test double digits",
 			args: args{inputStruct: utils.FileStruct{Contents: []byte("11abc2\npqr3stu88vwx\na1b2c3d4e5f\ntreb7uchet")}},
 			want: 142,
 		},
-		//{
-		//	name: "Part 1 live input",
-		//	args: args{inputStruct: utils.FileStruct{Path: "day_1_input.txt"}},
-		//	want: 0,
-		//},
+		{
+			name: "Part 1 live input",
+			args: args{inputStruct: utils.FileStruct{Path: "day_1_input.txt"}},
+			want: 54605,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

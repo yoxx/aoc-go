@@ -19,7 +19,9 @@ func PartOne(inputStruct utils.FileStruct) int {
 		if len(numbers) != 0 {
 			charFirstResult := []rune(numbers[0])
 			charLastResult := []rune(numbers[len(numbers)-1])
-			currentSum := string(charFirstResult[0:1]) + string(charFirstResult[len(charLastResult)-1:])
+			currentSum := string(charFirstResult[0:1]) + string(charLastResult[len(charLastResult)-1:])
+			//fmt.Printf("charFirstResult: %s, charLastResult: %s, currentSum: %s\n", string(charFirstResult), string(charLastResult), currentSum)
+
 			totalSum += utils.MustParseStringToInt(currentSum)
 		}
 	}
