@@ -50,8 +50,18 @@ func TestPartTwo(t *testing.T) {
 	}{
 		{
 			name: "Part 2 test",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("TODO_FILL_YOUR_CONTENTS_HERE")}},
-			want: 0,
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("two1nine\neightwothree\nabcone2threexyz\nxtwone3four\n4nineeightseven2\nzoneight234\n7pqrstsixteen")}},
+			want: 281,
+		},
+		{
+			name: "Part 2 test eighthree",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("eighthree")}},
+			want: 83,
+		},
+		{
+			name: "Part 2 test sevenine",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("sevenine")}},
+			want: 79,
 		},
 		//{
 		//	name: "Part 2 live input",
