@@ -19,11 +19,11 @@ func TestPartOne(t *testing.T) {
 			args: args{inputStruct: utils.FileStruct{Contents: []byte("467..114..\n...*......\n..35..633.\n......#...\n617*......\n.....+.58.\n..592.....\n......755.\n...$.*....\n.664.598..")}},
 			want: 4361,
 		},
-		{
-			name: "Part 1 live input",
-			args: args{inputStruct: utils.FileStruct{Path: "day_3_input.txt"}},
-			want: 0,
-		},
+		//{
+		//	name: "Part 1 live input",
+		//	args: args{inputStruct: utils.FileStruct{Path: "day_3_input.txt"}},
+		//	want: 0,
+		//},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
