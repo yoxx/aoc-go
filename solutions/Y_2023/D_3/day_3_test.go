@@ -19,6 +19,51 @@ func TestPartOne(t *testing.T) {
 			args: args{inputStruct: utils.FileStruct{Contents: []byte("467..114..\n...*......\n..35..633.\n......#...\n617*......\n.....+.58.\n..592.....\n......755.\n...$.*....\n.664.598..")}},
 			want: 4361,
 		},
+		{
+			name: "Part 1 test no match",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1.\n...")}},
+			want: 0,
+		},
+		{
+			name: "Part 1 test upper left",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("#..\n.1.\n...")}},
+			want: 1,
+		},
+		{
+			name: "Part 1 test upper middle",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte(".#.\n.1.\n...")}},
+			want: 1,
+		},
+		{
+			name: "Part 1 test upper right",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("..#\n.1.\n...")}},
+			want: 1,
+		},
+		{
+			name: "Part 1 test left",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n#1.\n...")}},
+			want: 1,
+		},
+		{
+			name: "Part 1 test right",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1#\n...")}},
+			want: 1,
+		},
+		{
+			name: "Part 1 test lower left",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1.\n#..")}},
+			want: 1,
+		},
+		{
+			name: "Part 1 test lower middle",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1.\n.#.")}},
+			want: 1,
+		},
+		{
+			name: "Part 1 test lower right",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1.\n..#")}},
+			want: 1,
+		},
 		//{
 		//	name: "Part 1 live input",
 		//	args: args{inputStruct: utils.FileStruct{Path: "day_3_input.txt"}},

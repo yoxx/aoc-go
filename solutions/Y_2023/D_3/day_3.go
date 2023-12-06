@@ -40,44 +40,45 @@ func PartOne(inputStruct utils.FileStruct) int {
 				// check for every rune the surrounding runes, even diagonally
 				// Previous line
 				if len(prevLine) > 0 {
-					if i > 0 {
+					if i > 0 { //check upperleft
 						if isSymbol(prevLine[i-1]) {
 							start, end, number := findNumberInLine(curLine, i)
 							partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
 						}
 					}
-					if isSymbol(prevLine[i]) {
+					if isSymbol(prevLine[i]) { //check upper middle
 						start, end, number := findNumberInLine(curLine, i)
 						partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
 					}
-					if i+1 < len(prevLine) && isSymbol(prevLine[i+1]) {
+					if i+1 < len(prevLine) && isSymbol(prevLine[i+1]) { //check upperright
 						start, end, number := findNumberInLine(curLine, i)
 						partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
 					}
 				}
 				// Current line
-				if i > 0 {
+				if i > 0 { // check left
 					if isSymbol(curLine[i-1]) {
 						start, end, number := findNumberInLine(curLine, i)
 						partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
 					}
 				}
-				if i+1 < len(curLine) && isSymbol(curLine[i+1]) {
+				if i+1 < len(curLine) && isSymbol(curLine[i+1]) { // check right
 					start, end, number := findNumberInLine(curLine, i)
 					partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
 				}
+				// Next line
 				if len(nextLine) > 0 {
-					if i > 0 {
+					if i > 0 { // check lowerleft
 						if isSymbol(nextLine[i-1]) {
 							start, end, number := findNumberInLine(curLine, i)
 							partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
 						}
 					}
-					if isSymbol(nextLine[i]) {
+					if isSymbol(nextLine[i]) { // check lower middle
 						start, end, number := findNumberInLine(curLine, i)
 						partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
 					}
-					if i+1 < len(nextLine) && isSymbol(nextLine[i+1]) {
+					if i+1 < len(nextLine) && isSymbol(nextLine[i+1]) { // check lowerright
 						start, end, number := findNumberInLine(curLine, i)
 						partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
 					}
