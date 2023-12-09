@@ -36,32 +36,32 @@ func TestPartOne(t *testing.T) {
 		},
 		{
 			name: "Part 1 test upper right",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("..#\n.0.\n...")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("..#\n.1.\n...")}},
 			want: 1,
 		},
 		{
 			name: "Part 1 test left",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n#0.\n...")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n#1.\n...")}},
 			want: 1,
 		},
 		{
 			name: "Part 1 test right",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.0#\n...")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1#\n...")}},
 			want: 1,
 		},
 		{
 			name: "Part 1 test lower left",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.0.\n#..")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1.\n#..")}},
 			want: 1,
 		},
 		{
 			name: "Part 1 test lower middle",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.0.\n.#.")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1.\n.#.")}},
 			want: 1,
 		},
 		{
 			name: "Part 1 test lower right",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.0.\n..#")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1.\n..#")}},
 			want: 1,
 		},
 		{
