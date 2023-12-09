@@ -36,39 +36,44 @@ func TestPartOne(t *testing.T) {
 		},
 		{
 			name: "Part 1 test upper right",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("..#\n.1.\n...")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("..#\n.0.\n...")}},
 			want: 1,
 		},
 		{
 			name: "Part 1 test left",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n#1.\n...")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n#0.\n...")}},
 			want: 1,
 		},
 		{
 			name: "Part 1 test right",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1#\n...")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.0#\n...")}},
 			want: 1,
 		},
 		{
 			name: "Part 1 test lower left",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1.\n#..")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.0.\n#..")}},
 			want: 1,
 		},
 		{
 			name: "Part 1 test lower middle",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1.\n.#.")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.0.\n.#.")}},
 			want: 1,
 		},
 		{
 			name: "Part 1 test lower right",
-			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.1.\n..#")}},
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("...\n.0.\n..#")}},
 			want: 1,
 		},
-		//{
-		//	name: "Part 1 live input",
-		//	args: args{inputStruct: utils.FileStruct{Path: "day_3_input.txt"}},
-		//	want: 0,
-		//},
+		{
+			name: "Part 1 test numbers connected by symbol",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte(".......\n100*100\n.......")}},
+			want: 200,
+		},
+		{
+			name: "Part 1 live input",
+			args: args{inputStruct: utils.FileStruct{Path: "day_3_input.txt"}},
+			want: 522726,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -22,9 +22,11 @@ func PartOne(inputStruct utils.FileStruct) int {
 	input, _ := utils.ReadFullFileInput(inputStruct)
 	lines := utils.ParseLinesFromFullInput(input)
 
+	lineCount := 0
 	partNumbers := []parts{}
 	// Loop through the lines array.
 	for key, line := range lines {
+		lineCount++
 		var prevLine []rune
 		// check if lines[key-1] exists
 		if key > 0 {
@@ -36,51 +38,51 @@ func PartOne(inputStruct utils.FileStruct) int {
 		}
 		curLine := []rune(line)
 		for i, char := range curLine {
-			if unicode.IsNumber(char) {
+			if unicode.IsDigit(char) {
 				// check for every rune the surrounding runes, even diagonally
 				// Previous line
 				if len(prevLine) > 0 {
 					if i > 0 { //check upperleft
 						if isSymbol(prevLine[i-1]) {
 							start, end, number := findNumberInLine(curLine, i)
-							partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
+							partNumbers = addToPartList(partNumbers, parts{row: lineCount, number: number, keys: keys{startAt: start, endsAt: end}})
 						}
 					}
 					if isSymbol(prevLine[i]) { //check upper middle
 						start, end, number := findNumberInLine(curLine, i)
-						partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
+						partNumbers = addToPartList(partNumbers, parts{row: lineCount, number: number, keys: keys{startAt: start, endsAt: end}})
 					}
 					if i+1 < len(prevLine) && isSymbol(prevLine[i+1]) { //check upperright
 						start, end, number := findNumberInLine(curLine, i)
-						partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
+						partNumbers = addToPartList(partNumbers, parts{row: lineCount, number: number, keys: keys{startAt: start, endsAt: end}})
 					}
 				}
 				// Current line
 				if i > 0 { // check left
 					if isSymbol(curLine[i-1]) {
 						start, end, number := findNumberInLine(curLine, i)
-						partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
+						partNumbers = addToPartList(partNumbers, parts{row: lineCount, number: number, keys: keys{startAt: start, endsAt: end}})
 					}
 				}
 				if i+1 < len(curLine) && isSymbol(curLine[i+1]) { // check right
 					start, end, number := findNumberInLine(curLine, i)
-					partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
+					partNumbers = addToPartList(partNumbers, parts{row: lineCount, number: number, keys: keys{startAt: start, endsAt: end}})
 				}
 				// Next line
 				if len(nextLine) > 0 {
 					if i > 0 { // check lowerleft
 						if isSymbol(nextLine[i-1]) {
 							start, end, number := findNumberInLine(curLine, i)
-							partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
+							partNumbers = addToPartList(partNumbers, parts{row: lineCount, number: number, keys: keys{startAt: start, endsAt: end}})
 						}
 					}
 					if isSymbol(nextLine[i]) { // check lower middle
 						start, end, number := findNumberInLine(curLine, i)
-						partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
+						partNumbers = addToPartList(partNumbers, parts{row: lineCount, number: number, keys: keys{startAt: start, endsAt: end}})
 					}
 					if i+1 < len(nextLine) && isSymbol(nextLine[i+1]) { // check lowerright
 						start, end, number := findNumberInLine(curLine, i)
-						partNumbers = addToPartList(partNumbers, parts{number: number, keys: keys{startAt: start, endsAt: end}})
+						partNumbers = addToPartList(partNumbers, parts{row: lineCount, number: number, keys: keys{startAt: start, endsAt: end}})
 					}
 				}
 			}
@@ -121,6 +123,8 @@ func addToPartList(partNumbers []parts, partNumber parts) []parts {
 			return partNumbers
 		}
 	}
+
+	//fmt.Printf("[%d %d %d] - %d\n", partNumber.row, partNumber.keys.startAt, partNumber.keys.endsAt, partNumber.number)
 	partNumbers = append(partNumbers, partNumber)
 	return partNumbers
 }
