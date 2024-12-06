@@ -68,11 +68,21 @@ func TestPartTwo(t *testing.T) {
 			args: args{inputStruct: utils.FileStruct{Contents: []byte("2 3 4 5 1")}},
 			want: 1,
 		},
-		//{
-		//	name: "Part 2 live input",
-		//	args: args{inputStruct: utils.FileStruct{Path: "day_2_input.txt"}},
-		//	want: 0,
-		//},
+		{
+			name: "Part 2 test - case 1",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("59 62 61 62 64")}},
+			want: 1,
+		},
+		{
+			name: "Part 2 test - case 2",
+			args: args{inputStruct: utils.FileStruct{Contents: []byte("70 68 72 74 75 78")}},
+			want: 1,
+		},
+		{
+			name: "Part 2 live input",
+			args: args{inputStruct: utils.FileStruct{Path: "day_2_input.txt"}},
+			want: 400,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

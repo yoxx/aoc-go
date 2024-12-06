@@ -27,7 +27,9 @@ func PartTwo(inputStruct utils.FileStruct) int {
 	fullFile, _ := utils.ReadFullFileInput(inputStruct)
 	contents := utils.ParseLinesFromFullInput(fullFile)
 	safeReports := 0
+	lineCounter := 0
 	for _, line := range contents {
+		lineCounter++
 		lineIntSlice := utils.ParseStringSliceToIntSlice(strings.Fields(line))
 
 		if len(lineIntSlice) > 0 && validateReport(lineIntSlice, true) {
@@ -52,8 +54,10 @@ func validateReport(lineIntSlice []int, problemDampner bool) bool {
 					if validateReport(newSlice, false) {
 						return true
 					} else {
-						// try and removing the first number
-						newSlice2 := lineIntSlice[1:]
+						// try and removing the current number
+						copySlice2 := make([]int, len(lineIntSlice))
+						copy(copySlice2, lineIntSlice)
+						newSlice2 := append(copySlice2[:i], copySlice2[i+1:]...)
 						return validateReport(newSlice2, false)
 					}
 				}
@@ -72,9 +76,19 @@ func validateReport(lineIntSlice []int, problemDampner bool) bool {
 					if validateReport(newSlice, false) {
 						return true
 					} else {
-						// try and removing the first number
-						newSlice2 := lineIntSlice[1:]
-						return validateReport(newSlice2, false)
+						// try and removing the current number
+						copySlice2 := make([]int, len(lineIntSlice))
+						copy(copySlice2, lineIntSlice)
+						newSlice2 := append(copySlice2[:i], copySlice2[i+1:]...)
+						if validateReport(newSlice2, false) {
+							return true
+						} else {
+							// try and removing the FIRST number
+							copySlice3 := make([]int, len(lineIntSlice))
+							copy(copySlice3, lineIntSlice)
+							newSlice3 := copySlice3[1:]
+							return validateReport(newSlice3, false)
+						}
 					}
 				}
 				return false
